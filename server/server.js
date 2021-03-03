@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', true);
@@ -20,7 +19,7 @@ const { data } = require('./data.js')
 const hostname = 'localhost';
 
 app.get('/', (req, res) => {
-        res.send(data);
+        res.json(data);
 })
 
 app.listen(PORT, hostname);

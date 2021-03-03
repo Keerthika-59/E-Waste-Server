@@ -15,11 +15,11 @@ app.use(function (req, res, next) {
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
-const { data } = require('./data.js')
+const info = require('./data.js')
 const hostname = 'localhost';
 
 app.get('/', (req, res) => {
-        res.json(data);
+        res.json(info.data);
 })
 
 app.listen(PORT, hostname);

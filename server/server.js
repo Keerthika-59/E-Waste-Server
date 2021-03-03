@@ -1,10 +1,22 @@
 const express = require('express');
+
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 3000;
+
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Headers', "Origin, X-Requested-with,Content-Type,Accept,Authorization");
+    res.setHeader('Access-Control-Allow-Headers', 'record-count,my-token,x-auth');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    next();
+})
 
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: false }));
 const { data } = require('./data.js')
+const hostname = 'localhost';
 
 app.get('/', (req, res) => {
     try {
@@ -17,6 +29,4 @@ app.get('/', (req, res) => {
     }
 })
 
-app.listen(PORT, () => {
-    console.log(`Server is Up and Running at ${PORT}`);
-});
+app.listen(PORT, hostname);

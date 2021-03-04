@@ -13,13 +13,12 @@ app.use(function (req, res, next) {
 })
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: false }));
-const info = require('./data.js')
-const hostname = 'localhost';
 
 app.get('/', (req, res) => {
-        res.json(info.data);
+        res.json({msg : 'Hello world'});
 })
 
-app.listen(PORT, hostname);
+app.listen(PORT, () => {
+
+});

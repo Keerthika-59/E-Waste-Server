@@ -1,24 +1,30 @@
-const express = require('express');
 
+const express = require("express");
 const app = express();
-const PORT = 3000;
+const PORT=process.env.PORT || 3000
 
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Headers', "Origin, X-Requested-with,Content-Type,Accept,Authorization");
-    res.setHeader('Access-Control-Allow-Headers', 'record-count,my-token,x-auth');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+app.use(function(req,res,next){
+    res.header('Access-Control-Allow-Origin','*') ;
+    res.header('Access-Control-Allow-Credentials',true);
+    res.setHeader('Access-Control-Allow-Headers',"Origin, X-Requested-with,Content-Type,Accept,Authorization");
+    res.setHeader('Access-Control-Allow-Headers','record-count,my-token,x-auth');
+    res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE,OPTIONS');
     next();
 })
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended:false}));
+const hostname='localhost';
 
-app.get('/', (req, res) => {
-        res.json({msg : 'Hello world'});
+app.listen(PORT,hostname,()=>{
+    // console.log(`server running at http://${hostname}:${PORT}/`);
+    //Added new line
+    //new comment..
+    //added new line
+    });
+
+
+app.get('/',(req,res)=>{
+   
+    res.send("Hello world!!")
 })
-
-app.listen(PORT, () => {
-
-});

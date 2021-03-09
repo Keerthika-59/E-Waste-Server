@@ -4,7 +4,7 @@ const app = express();
 const PORT = 3000;
 
 
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Headers', "Origin, X-Requested-with,Content-Type,Accept,Authorization");
@@ -20,7 +20,13 @@ const { data } = require('./data.js')
 const hostname = 'localhost';
 
 app.get('/', (req, res) => {
-        res.send(data);
+    res.send(data);
 })
 
-app.listen(PORT, hostname);
+require('../server/routes/contactRoute.js')(app);
+require('../server/routes/userRoute.js')(app);
+
+
+app.listen(5000, () => {
+    console.log("Server is listening on port 5000");
+});

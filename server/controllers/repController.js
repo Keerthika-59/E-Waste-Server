@@ -1,13 +1,13 @@
-const User = require('../models/userModel.js');
+const Rep = require('../models/repModel.js');
 
 exports.create = (req, res) => {
     if (!req.body.name) {
         return res.status(400).send({
-            message: "Please enter user details"
+            message: "Please enter representative details"
         });
     }
 
-    const user = new User({
+    const rep = new Rep({
         name: req.body.name,
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
@@ -22,63 +22,63 @@ exports.create = (req, res) => {
         confirmPassword: req.body.confirmPassword,
 
     });
-    console.log(user);
-    user.save()
-        .then(oUser => {
-            res.send(oUser);
+    console.log(rep);
+    rep.save()
+        .then(oRep => {
+            res.send(oRep);
         }).catch(err => {
             res.status(500).send({
-                message: err.message || "Error occurred while creating the user details"
+                message: err.message || "Error occurred while creating the representative details"
             });
         });
 };
 
 exports.getAll = (req, res) => {
-    User.find()
-        .then(oUser => {
+    Rep.find()
+        .then(oRep => {
             console.log("entered")
-            res.send(oUser);
+            res.send(oRep);
         }).catch(err => {
             res.status(500).send({
-                message: err.message || "Error occurred while retrieving the user details"
+                message: err.message || "Error occurred while retrieving the Representative details"
             });
         });
 };
 
 
-// Find a single user with a userId
+// Find a single representative with a representativeId
 exports.findOne = (req, res) => {
-    User.findById(req.params.userId)
-        .then(user => {
-            if (!user) {
+    Rep.findById(req.params.repId)
+        .then(oRep => {
+            if (!oRep) {
                 return res.status(404).send({
-                    message: "User not found with id " + req.params.userId
+                    message: "Representative not found with id " + req.params.repId
                 });
             }
-            res.send(user);
+            res.send(oRep);
         }).catch(err => {
             if (err.kind === 'ObjectId') {
                 return res.status(404).send({
-                    message: "User not found with id " + req.params.userId
+                    message: "Representative not found with id " + req.params.repId
                 });
             }
             return res.status(500).send({
-                message: "Error retrieving user with id " + req.params.userId
+                message: "Error retrieving Representative with id " + req.params.repId
             });
         });
 };
 
-// Update a user identified by the userId in the request
+// Update a Representative identified by the RepresentativeId in the request
 exports.update = (req, res) => {
     // Validate Request
     if (!req.body.name) {
         return res.status(400).send({
-            message: "User name can not be empty"
+            message: "Representative name can not be empty"
         });
     }
 
-    // Find user and update it with the request body
-    User.findByIdAndUpdate(req.params.userId, {
+    // Find representative and update it with the request body
+    Rep.findByIdAndUpdate(req.params.repId, {
             name: req.body.name,
             phoneNumber: req.body.phoneNumber,
             email: req.body.email,
@@ -100,43 +100,43 @@ exports.update = (req, res) => {
                 }
             }
         }, { new: true })
-        .then(user => {
-            if (!user) {
+        .then(oRep => {
+            if (!oRep) {
                 return res.status(404).send({
-                    message: "user not found with id " + req.params.userId
+                    message: "Representative not found with id " + req.params.repId
                 });
             }
-            res.send(user);
+            res.send(oRep);
         }).catch(err => {
             if (err.kind === 'ObjectId') {
                 return res.status(404).send({
-                    message: "user not found with id " + req.params.userId
+                    message: "Representative not found with id " + req.params.repId
                 });
             }
             return res.status(500).send({
-                message: "Error updating user with id " + req.params.userId
+                message: "Error updating Representative with id " + req.params.repId
             });
         });
 };
 
-// Delete a user with the specified userId in the request
+// Delete a representative with the specified representativeId in the request
 exports.delete = (req, res) => {
-    User.findByIdAndRemove(req.params.userId)
-        .then(user => {
-            if (!user) {
+    Rep.findByIdAndRemove(req.params.repId)
+        .then(oRep => {
+            if (!oRep) {
                 return res.status(404).send({
-                    message: "user not found with id " + req.params.userId
+                    message: "Representative not found with id " + req.params.repId
                 });
             }
-            res.send({ message: "user deleted successfully!" });
+            res.send({ message: "Representative deleted successfully!" });
         }).catch(err => {
             if (err.kind === 'ObjectId' || err.name === 'NotFound') {
                 return res.status(404).send({
-                    message: "user not found with id " + req.params.userId
+                    message: "Representative not found with id " + req.params.repId
                 });
             }
             return res.status(500).send({
-                message: "Could not delete user with id " + req.params.userId
+                message: "Could not delete representative with id " + req.params.repId
             });
         });
 };

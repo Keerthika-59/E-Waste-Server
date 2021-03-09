@@ -1,4 +1,4 @@
-const mongoose = reqquire('mongoose');
+const mongoose = require('mongoose');
 const UserActivitySchema = new mongoose.Schema({
     bioDegradable: Boolean,
     nonBioDegradable: Boolean,
@@ -6,7 +6,6 @@ const UserActivitySchema = new mongoose.Schema({
         itemName: String,
         category: String
     }],
-
     status: {
         type: Boolean,
         default: false

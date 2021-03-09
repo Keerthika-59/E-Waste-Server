@@ -44,7 +44,7 @@ const RepSchema = new mongoose.Schema({
         houseNumber: String,
     },
 
-    activity: RepActivitySchema,
+    // activity: RepActivitySchema,
 
     password: {
         type: String,
@@ -57,4 +57,4 @@ const RepSchema = new mongoose.Schema({
     },
 })
 
-const Rep = mongoose.model('Rep', RepresentativeSchema);
+module.exports = mongoose.model('Rep', RepSchema);

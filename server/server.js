@@ -11,21 +11,22 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(dbConfig.url,{ useUnifiedTopology: true }, {
-   useNewUrlParser: true
+mongoose.connect(dbConfig.url, { useUnifiedTopology: true }, {
+    useNewUrlParser: true
 }).then(() => {
-   console.log("Successfully connected to the database");
+    console.log("Successfully connected to the database");
 }).catch(err => {
-   console.log('Could not connect to the database', err);
-   process.exit();
+    console.log('Could not connect to the database', err);
+    process.exit();
 });
 
 app.get('/', (req, res) => {
-   res.json({"message": "Welcome!"});
+    res.json({ "message": "Welcome!" });
 });
 
 require('../server/routes/contactRoute.js')(app);
+require('../server/routes/userRoute.js')(app);
 
 app.listen(5000, () => {
-   console.log("Server is listening on port 5000");
+    console.log("Server is listening on port 5000");
 });

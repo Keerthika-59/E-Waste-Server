@@ -1,34 +1,49 @@
 const dotenv = require("dotenv");
 const router = require("express").Router();
-const User = require("../models/userModel");
+const { User, Activity}  = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 dotenv.config();
-router.get("/", async (req, res,next) => {
+router.get("/", async (req, res) => {
   try {
     const allUsers = await User.find({});
-    return res.status(200).json(allUsers);
+    // return res.status(200).json(allUsers);
+    res.status(200).json(allUsers)
   } catch (err) {
-    console.error(err);
-    next({ status: 500, message: "failed to get users" })
+    console.log(`oopps!!! ${err.message}`);
+    res.send(500).send('Failed to Get Data');
     // res.status(500).send();
   }
 });
 router.post("/", async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password)
+    // const { email, password ,name,phoneNumber,gender,city,address} = req.body;
+    const UserPost = new User({
+      name : req.body.name,
+      phoneNumber: req.body.phoneNumber,
+      email: req.body.email,
+      gender: req.body.gender,
+      city: req.body.city,
+      address : {
+          pincode: req.body.address.pincode,
+          street: req.body.address.street,
+          houseNumber: req.body.address.houseNumber
+      },
+      password: req.body.password,
+      confirmPassword: req.body.confirmPassword,
+  })
+    if (!UserPost.email || !UserPost.password)
       return res
         .status(400)
         .json({ errorMessage: "Please enter all required fields." });
 
-    if (password.length < 6)
+    if (UserPost.password.length < 6)
       return res.status(400).json({
         errorMessage: "Please enter a password of at least 6 characters.",
       });
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne( {email:UserPost.email} );
     if (existingUser)
       return res.status(400).json({
         errorMessage: "An account with this email already exists.",
@@ -37,32 +52,52 @@ router.post("/", async (req, res) => {
     // hash the password
 
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    const passwordHash = await bcrypt.hash(UserPost.password, salt);
 
     // save a new user account to the db
 
     const newUser = new User({
-      email,
-      passwordHash,
+      name:UserPost.name,
+      phoneNumber:UserPost.phoneNumber,
+      gender:UserPost.gender,
+      city:UserPost.city,
+      address : {
+        pincode: UserPost.address.pincode,
+        street: UserPost.address.street,
+        houseNumber: UserPost.address.houseNumber
+    },
+      email:UserPost.email,
+      password:passwordHash,
+
     });
 
-    const savedUser = await newUser.save();
-    const token = jwt.sign(
-      {
-        user: savedUser._id,
-      },
-      process.env.JWT_SECRET
-    );
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,     //sameSite:'none'->Cookies will be sent in all contexts, i.e in responses to both first-party
-        sameSite: "none",   ///////////and cross-origin requests.If SameSite=None is set,
-      })                    ///////////the cookie Secure attribute must also be set (or the cookie will be blocked).
-      .send('user created');
+    await newUser.save()
+    .then( (res) => {
+      console.log(res);
+  })
+  .catch( (e) => {
+      console.log(e)
+  });
+  res.send({
+    msg : 'Data entered successfully'
+})
+    // const token = jwt.sign(
+    //   {
+    //     user: savedUser._id,
+    //   },
+    //   process.env.JWT_SECRET
+    // );
+    // res
+    //   .cookie("token", token, {
+    //     httpOnly: true,
+    //     secure: true,     //sameSite:'none'->Cookies will be sent in all contexts, i.e in responses to both first-party
+    //     sameSite: "none",   ///////////and cross-origin requests.If SameSite=None is set,
+    //   })                    ///////////the cookie Secure attribute must also be set (or the cookie will be blocked).
+    //   .send('user created');
+
   } catch (err) {
     console.error(err);
-    res.status(500).send();
+    res.status(500).send('Failed to add');
   }
 });
 
@@ -84,7 +119,7 @@ router.post("/login", async (req, res) => {
   
       const passwordCorrect = await bcrypt.compare(
         password,
-        existingUser.passwordHash
+        existingUser.password
       );
       if (!passwordCorrect)
         return res.status(401).json({ errorMessage: "Wrong email or password." });
@@ -127,9 +162,8 @@ router.post("/login", async (req, res) => {
     try {
       const token = req.cookies.token;
       if (!token) return res.json(false);
-  
       jwt.verify(token, process.env.JWT_SECRET);
-  
+      
       res.send(true);
     } catch (err) {
       res.json(false);

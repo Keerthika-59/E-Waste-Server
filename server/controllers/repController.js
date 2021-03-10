@@ -54,6 +54,7 @@ exports.getAll = (req, res) => {
     Rep.find()
         .then(oRep => {
             console.log("entered")
+            console.log(oRep);
             res.send(oRep);
         }).catch(err => {
             res.status(500).send({

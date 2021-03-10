@@ -61,6 +61,7 @@ require('../server/routes/userRoute.js')(app);
 //require('../server/routes/repRoute.js')(app);
 const repRouter = require('../server/routes/repRoute');
 app.use('/reps', repRouter);
+app.use(express.static('images'));
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)

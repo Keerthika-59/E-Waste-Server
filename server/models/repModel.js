@@ -77,7 +77,10 @@ const repSchema = new Schema({
     },
 
     idProof: {
-        type: String
+        type: String,
+        required: true
+            // data: Buffer,
+            // contentType: String
     },
 
     city: {

@@ -48,7 +48,7 @@ router.route('/add').post(upload.single('idProof'), (req, res) => {
     const city = req.body.city;
     const address = req.body.address;
     const password = req.body.password;
-
+    console.log(req.file);
     const newRepData = {
         name,
         phoneNumber,
@@ -66,6 +66,8 @@ router.route('/add').post(upload.single('idProof'), (req, res) => {
         .then(() => res.json('Representative Added'))
         .catch(err => res.status(400).json('Error: ' + err));
 });
+
+
 
 router.route('/').get(reps.getAll);
 

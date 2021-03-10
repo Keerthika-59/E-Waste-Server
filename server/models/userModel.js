@@ -30,9 +30,8 @@ const UserSchema = new mongoose.Schema({
     },
 
     address: {
-        pincode: { type: Number, exact: 6 },
-        street: String,
-        houseNumber: String,
+         type: String,
+        required: true
     },
 
     activity: [UserActivitySchema],

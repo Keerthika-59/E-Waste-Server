@@ -1,30 +1,35 @@
 
-const express = require("express");
+const bodyParser = require('body-parser');
+
 const app = express();
-const PORT=process.env.PORT || 3000
 
-app.use(function(req,res,next){
-    res.header('Access-Control-Allow-Origin','*') ;
-    res.header('Access-Control-Allow-Credentials',true);
-    res.setHeader('Access-Control-Allow-Headers',"Origin, X-Requested-with,Content-Type,Accept,Authorization");
-    res.setHeader('Access-Control-Allow-Headers','record-count,my-token,x-auth');
-    res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE,OPTIONS');
-    next();
-})
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
-app.use(express.json());
-app.use(express.urlencoded({extended:false}));
-const hostname='localhost';
+const dbConfig = require('./config/config.js');
+const mongoose = require('mongoose');
 
-app.listen(PORT,hostname,()=>{
-    // console.log(`server running at http://${hostname}:${PORT}/`);
-    //Added new line
-    //new comment..
-    //added new line
-    });
+mongoose.Promise = global.Promise;
 
+mongoose.connect(dbConfig.url, { useUnifiedTopology: true }, {
+    useNewUrlParser: true
+}).then(() => {
+    console.log("Successfully connected to the database");
+}).catch(err => {
+    console.log('Could not connect to the database', err);
+    process.exit();
+});
 
-app.get('/',(req,res)=>{
-   
-    res.send("Hello world!!")
-})
+app.get('/', (req, res) => {
+    res.json({ "message": "Welcome!" });
+});
+
+require('../server/routes/contactRoute.js')(app);
+require('../server/routes/userActivityRoute.js')(app);
+
+require('../server/routes/userRoute.js')(app);
+require('../server/routes/repRoute.js')(app);
+
+app.listen(3000, () => {
+    console.log("Server is listening on port 3000");
+});

@@ -1,6 +1,59 @@
+// const mongoose = require("mongoose");
+
+// const RepSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: true,
+//         min: 2,
+//         max: 20
+//     },
+
+//     phoneNumber: {
+//         type: Number,
+//         required: true
+//     },
+
+//     email: {
+//         type: String,
+//         required: true
+
+//     },
+
+//     gender: {
+//         type: String,
+//         required: true
+//     },
+
+//     identityProof: {
+//        type: String
+//     },
+
+//     city: {
+//         type: String,
+//         required: true
+//     },
+
+//     address: {
+//         type: String,
+//         required: true
+//     },
+
+//     // activity: RepActivitySchema,
+
+//     password: {
+//         type: String,
+//         required: true
+//     }
+
+// })
+
+// const Rep = mongoose.model('Rep', RepresentativeSchema);
+
 const mongoose = require("mongoose");
 
-const RepSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const repSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -16,7 +69,6 @@ const RepSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true
-
     },
 
     gender: {
@@ -24,8 +76,8 @@ const RepSchema = new mongoose.Schema({
         required: true
     },
 
-    identityProof: {
-       type: String
+    idProof: {
+        type: String
     },
 
     city: {
@@ -44,7 +96,8 @@ const RepSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+});
 
-})
+const Rep = mongoose.model('Rep', repSchema);
 
-const Rep = mongoose.model('Rep', RepresentativeSchema);
+module.exports = Rep;

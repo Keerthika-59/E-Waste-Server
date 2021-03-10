@@ -1,31 +1,54 @@
 const Rep = require('../models/repModel.js');
+// const multer = require('multer');
+// const { v4: uuidv4 } = require('uuid');
+// let path = require('path');
 
-exports.create = (req, res) => {
-    if (!req.body.name) {
-        return res.status(400).send({
-            message: "Please enter representative details"
-        });
-    }
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, 'images');
+//     },
+//     filename: function(req, file, cb) {
+//         cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
+//     }
+// });
 
-    const rep = new Rep({
-        name: req.body.name,
-        phoneNumber: req.body.phoneNumber,
-        email: req.body.email,
-        gender: req.body.gender,
-        city: req.body.city,
-        address: req.body.address,
-        password: req.body.password,
-    });
-    console.log(rep);
-    rep.save()
-        .then(oRep => {
-            res.send(oRep);
-        }).catch(err => {
-            res.status(500).send({
-                message: err.message || "Error occurred while creating the representative details"
-            });
-        });
-};
+// const fileFilter = (req, file, cb) => {
+//     const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+//     if (allowedFileTypes.includes(file.mimetype)) {
+//         cb(null, true);
+//     } else {
+//         cb(null, false);
+//     }
+// }
+
+// let upload = multer({ storage, fileFilter });
+// exports.create = (req, res) => {
+//     const name = req.body.name;
+//     const phoneNumber = req.body.phoneNumber;
+//     const email = req.body.email;
+//     const gender = req.body.gender;
+//     const idProof = req.file.filename;
+//     const city = req.body.city;
+//     const address = req.body.address;
+//     const password = req.body.password;
+
+//     const newRepData = {
+//         name,
+//         phoneNumber,
+//         email,
+//         gender,
+//         idProof,
+//         city,
+//         address,
+//         password
+//     }
+
+//     const newRep = new Rep(newRepData);
+
+//     newRep.save()
+//         .then(() => res.json('Representative Added'))
+//         .catch(err => res.status(400).json('Error: ' + err));
+// };
 
 exports.getAll = (req, res) => {
     Rep.find()
@@ -79,7 +102,8 @@ exports.update = (req, res) => {
             gender: req.body.gender,
             city: req.body.city,
             address: req.body.address,
-            password: req.body.password,
+            password: req.body.password
+
             // activity: {
             //     bioDegradable: req.body.activity.bioDegradable,
             //     nonBioDegradable: req.body.activity.nonBioDegradable,
@@ -87,7 +111,7 @@ exports.update = (req, res) => {
             //         itemName: req.body.activity.donation.itemName,
             //         category: req.body.activity.donation.category
             //     }
-            // }
+            //}
         }, { new: true })
         .then(oRep => {
             if (!oRep) {

@@ -25,7 +25,7 @@ const RepSchema = new mongoose.Schema({
     },
 
     identityProof: {
-        type: String
+       type: String
     },
 
     city: {
@@ -44,6 +44,7 @@ const RepSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+
 })
 
-module.exports = mongoose.model('Rep', RepSchema);
+const Rep = mongoose.model('Rep', RepresentativeSchema);

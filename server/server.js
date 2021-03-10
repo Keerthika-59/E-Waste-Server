@@ -25,6 +25,9 @@ app.get('/', (req, res) => {
     res.json({ "message": "Welcome!" });
 });
 
+require('../server/routes/contactRoute.js')(app);
+require('../server/routes/userActivityRoute.js')(app);
+
 require('../server/routes/userRoute.js')(app);
 require('../server/routes/repRoute.js')(app);
 

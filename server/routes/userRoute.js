@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const dotenv = require("dotenv");
 const router = require("express").Router();
 const { User, Activity}  = require("../models/userModel");
@@ -171,3 +172,19 @@ router.post("/login", async (req, res) => {
   });
 
 module.exports = router;
+=======
+module.exports = (app) => {
+    const users = require('../controllers/userController.js');
+
+    app.post('/users', users.create);
+
+    app.get('/users', users.getAll);
+
+    app.get('/users/:userId', users.findOne);
+
+    app.put('/users/:userId', users.update);
+
+    app.delete('/users/:userId', users.delete);
+
+}
+>>>>>>> keerthi-proj

@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const UserSchema = new mongoose.Schema({
+const mongoose = require("mongoose");
+
+const RepSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -9,18 +10,22 @@ const UserSchema = new mongoose.Schema({
 
     phoneNumber: {
         type: Number,
-        required: true,
-        exact: 10
+        required: true
     },
 
     email: {
         type: String,
         required: true
+
     },
 
     gender: {
         type: String,
         required: true
+    },
+
+    identityProof: {
+        type: String
     },
 
     city: {
@@ -33,11 +38,12 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
 
-    // activity: [UserActivitySchema],
+    // activity: RepActivitySchema,
 
     password: {
         type: String,
         required: true
     }
 })
-module.exports = mongoose.model('User', UserSchema);
+
+module.exports = mongoose.model('Rep', RepSchema);

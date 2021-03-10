@@ -1,4 +1,3 @@
-
 const express = require('express');
 
 const bodyParser = require('body-parser');
@@ -25,15 +24,6 @@ mongoose.connect(dbConfig.url,{ useUnifiedTopology: true }, {
 app.get('/', (req, res) => {
    res.json({"message": "Welcome!"});
 });
-
-
-require('../server/routes/contactRoute.js')(app);
-
-app.listen(5000, () => {
-   console.log("Server is listening on port 5000");
-});
-
-
 
 require('../server/routes/contactRoute.js')(app);
 require('../server/routes/userRoute.js')(app);

@@ -24,10 +24,9 @@ const RepSchema = new mongoose.Schema({
         required: true
     },
 
-    // identityProof: {
-    //     data: Buffer,
-    //     contentType: String,
-    // },
+    identityProof: {
+        type: String
+    },
 
     city: {
         type: String,
@@ -35,13 +34,7 @@ const RepSchema = new mongoose.Schema({
     },
 
     address: {
-        pincode: {
-            type: Number,
-            exact: 6
-        },
-
-        street: String,
-        houseNumber: String,
+        type: String
     },
 
     // activity: RepActivitySchema,
@@ -49,12 +42,7 @@ const RepSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-
-    confirmPassword: {
-        type: String,
-        required: true
-    },
+    }
 })
 
 module.exports = mongoose.model('Rep', RepSchema);

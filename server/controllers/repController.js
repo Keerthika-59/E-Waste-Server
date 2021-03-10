@@ -13,14 +13,8 @@ exports.create = (req, res) => {
         email: req.body.email,
         gender: req.body.gender,
         city: req.body.city,
-        address: {
-            pincode: req.body.address.pincode,
-            street: req.body.address.street,
-            houseNumber: req.body.address.houseNumber
-        },
+        address: req.body.address,
         password: req.body.password,
-        confirmPassword: req.body.confirmPassword,
-
     });
     console.log(rep);
     rep.save()
@@ -84,21 +78,16 @@ exports.update = (req, res) => {
             email: req.body.email,
             gender: req.body.gender,
             city: req.body.city,
-            address: {
-                pincode: req.body.address.pincode,
-                street: req.body.address.street,
-                houseNumber: req.body.address.houseNumber
-            },
+            address: req.body.address,
             password: req.body.password,
-            confirmPassword: req.body.confirmPassword,
-            activity: {
-                bioDegradable: req.body.activity.bioDegradable,
-                nonBioDegradable: req.body.activity.nonBioDegradable,
-                donation: {
-                    itemName: req.body.activity.donation.itemName,
-                    category: req.body.activity.donation.category
-                }
-            }
+            // activity: {
+            //     bioDegradable: req.body.activity.bioDegradable,
+            //     nonBioDegradable: req.body.activity.nonBioDegradable,
+            //     donation: {
+            //         itemName: req.body.activity.donation.itemName,
+            //         category: req.body.activity.donation.category
+            //     }
+            // }
         }, { new: true })
         .then(oRep => {
             if (!oRep) {

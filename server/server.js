@@ -24,10 +24,9 @@ app.get('/', (req, res) => {
     res.json({ "message": "Welcome!" });
 });
 
-require('../server/routes/contactRoute.js')(app);
 require('../server/routes/userRoute.js')(app);
 require('../server/routes/repRoute.js')(app);
 
-app.listen(5000, () => {
-    console.log("Server is listening on port 5000");
+app.listen(3000, () => {
+    console.log("Server is listening on port 3000");
 });

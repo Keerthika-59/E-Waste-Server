@@ -1,4 +1,8 @@
 const express = require('express');
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -23,9 +27,21 @@ mongoose.connect(dbConfig.url,{ useUnifiedTopology: true }, {
 app.get('/', (req, res) => {
    res.json({"message": "Welcome!"});
 });
+<<<<<<< Updated upstream
 
 require('../server/routes/contactRoute.js')(app);
 
 app.listen(5000, () => {
    console.log("Server is listening on port 5000");
 });
+=======
+
+
+require('../server/routes/contactRoute.js')(app);
+require('../server/routes/userRoute.js')(app);
+require('../server/routes/userActivityRoute.js')(app);
+
+app.listen(3000, () => {
+    console.log("Server is listening on port 3000");
+});
+>>>>>>> Stashed changes

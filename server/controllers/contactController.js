@@ -29,7 +29,7 @@ exports.create = (req, res) => {
 exports.getAll = (req, res) => {
     Contact.find({})
         .then(oContact => {
-            console.log("entered")
+            console.log("Got the details!")
             res.send(oContact);
         }).catch(err => {
         res.status(500).send({

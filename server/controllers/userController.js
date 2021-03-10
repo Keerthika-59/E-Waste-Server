@@ -1,11 +1,11 @@
 const User = require('../models/userModel.js');
 
 exports.create = (req, res) => {
-    if (!req.body.name) {
-        return res.status(400).send({
-            message: "Please enter user details"
-        });
-    }
+    // if (!req.body.name) {
+    //     return res.status(400).send({
+    //         message: "Please enter user details"
+    //     });
+    // }
 
     const user = new User({
         name: req.body.name,

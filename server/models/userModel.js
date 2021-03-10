@@ -35,17 +35,17 @@ const UserSchema = new mongoose.Schema({
         houseNumber: String,
     },
 
-    // activity: [UserActivitySchema],
+    activity: [UserActivitySchema],
 
     password: {
         type: String,
         required: true
     },
 
-    confirmPassword: {
-        type: String,
-        required: true
-    },
+    // confirmPassword: {
+    //     type: String,
+    //     required: true
+    // },
 })
 
 module.exports = mongoose.model('User', UserSchema);

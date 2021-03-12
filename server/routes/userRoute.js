@@ -39,11 +39,7 @@ router.post("/", async (req, res) => {
       email: req.body.email,
       gender: req.body.gender,
       city: req.body.city,
-      address : {
-          pincode: req.body.address.pincode,
-          street: req.body.address.street,
-          houseNumber: req.body.address.houseNumber
-      },
+      address : req.body.password,
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
   })
@@ -75,11 +71,7 @@ router.post("/", async (req, res) => {
       phoneNumber:UserPost.phoneNumber,
       gender:UserPost.gender,
       city:UserPost.city,
-      address : 'kjhghj',
-        // pincode: UserPost.address.pincode,
-        // street: UserPost.address.street,
-        // houseNumber: UserPost.address.houseNumber
-    // },
+      address : UserPost.address,
       email:UserPost.email,
       password:passwordHash,
 

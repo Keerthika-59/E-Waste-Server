@@ -78,7 +78,7 @@ const repSchema = new Schema({
 
     idProof: {
         type: String,
-        required: true
+        // required: true
             // data: Buffer,
             // contentType: String
     },

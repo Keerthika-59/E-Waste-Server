@@ -67,10 +67,12 @@ connection.once('open', () => {
 
 require('../server/routes/contactRoute.js')(app);
 require('../server/routes/userActivityRoute.js')(app);
-require('../server/routes/userRoute.js')(app);
-require('../server/routes/repRoute.js')(app);
-const repRouter = require('../server/routes/repRoute');
-app.use('/reps', repRouter);
+// require('../server/routes/userRoute.js')(app);
+app.use("/auth1",require("./routes/userRoute"))
+// require('../server/routes/repRoute.js')(app);
+app.use("/reps",require("./routes/repRoute"))
+// const repRouter = require('../server/routes/repRoute');
+// app.use('/reps', repRouter);
 app.use(express.static('images'));
 
 app.listen(port, () => {

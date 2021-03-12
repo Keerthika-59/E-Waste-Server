@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
       email: req.body.email,
       gender: req.body.gender,
       city: req.body.city,
-      address : req.body.password,
+      address : req.body.address,
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
   })

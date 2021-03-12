@@ -68,7 +68,7 @@ connection.once('open', () => {
 require('../server/routes/contactRoute.js')(app);
 require('../server/routes/userActivityRoute.js')(app);
 require('../server/routes/userRoute.js')(app);
-//require('../server/routes/repRoute.js')(app);
+require('../server/routes/repRoute.js')(app);
 const repRouter = require('../server/routes/repRoute');
 app.use('/reps', repRouter);
 app.use(express.static('images'));

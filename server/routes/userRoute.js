@@ -1,7 +1,20 @@
-<<<<<<< HEAD
+// module.exports = (app) => {
+//     const users = require('../controllers/userController.js');
+
+//     app.post('/users', users.create);
+
+//     app.get('/users', users.getAll);
+
+//     app.get('/users/:userId', users.findOne);
+
+//     app.put('/users/:userId', users.update);
+
+//     app.delete('/users/:userId', users.delete);
+
+// }
 const dotenv = require("dotenv");
 const router = require("express").Router();
-const { User, Activity}  = require("../models/userModel");
+const User  = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -26,11 +39,7 @@ router.post("/", async (req, res) => {
       email: req.body.email,
       gender: req.body.gender,
       city: req.body.city,
-      address : {
-          pincode: req.body.address.pincode,
-          street: req.body.address.street,
-          houseNumber: req.body.address.houseNumber
-      },
+      address : req.body.address,
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
   })
@@ -62,11 +71,7 @@ router.post("/", async (req, res) => {
       phoneNumber:UserPost.phoneNumber,
       gender:UserPost.gender,
       city:UserPost.city,
-      address : {
-        pincode: UserPost.address.pincode,
-        street: UserPost.address.street,
-        houseNumber: UserPost.address.houseNumber
-    },
+      address : UserPost.address,
       email:UserPost.email,
       password:passwordHash,
 
@@ -172,19 +177,3 @@ router.post("/login", async (req, res) => {
   });
 
 module.exports = router;
-=======
-module.exports = (app) => {
-    const users = require('../controllers/userController.js');
-
-    app.post('/users', users.create);
-
-    app.get('/users', users.getAll);
-
-    app.get('/users/:userId', users.findOne);
-
-    app.put('/users/:userId', users.update);
-
-    app.delete('/users/:userId', users.delete);
-
-}
->>>>>>> keerthi-proj

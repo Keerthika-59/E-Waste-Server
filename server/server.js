@@ -57,7 +57,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const uri = 'mongodb://localhost:27017/EWaste';
+const uri = 'mongodb+srv://admin:admin@ewaste.aztcn.mongodb.net/ewastage';
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 
 const connection = mongoose.connection;

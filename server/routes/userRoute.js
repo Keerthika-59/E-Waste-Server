@@ -1,6 +1,20 @@
+// module.exports = (app) => {
+//     const users = require('../controllers/userController.js');
+
+//     app.post('/users', users.create);
+
+//     app.get('/users', users.getAll);
+
+//     app.get('/users/:userId', users.findOne);
+
+//     app.put('/users/:userId', users.update);
+
+//     app.delete('/users/:userId', users.delete);
+
+// }
 const dotenv = require("dotenv");
 const router = require("express").Router();
-const { User, Activity}  = require("../models/userModel");
+const User  = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -16,23 +30,23 @@ router.get("/", async (req, res) => {
     // res.status(500).send();
   }
 });
-router.post("/", async (req, res) => {
+
+router.post("/signup", async (req, res) => {
   try {
     // const { email, password ,name,phoneNumber,gender,city,address} = req.body;
+
     const UserPost = new User({
       name : req.body.name,
       phoneNumber: req.body.phoneNumber,
       email: req.body.email,
       gender: req.body.gender,
       city: req.body.city,
-      address : {
-          pincode: req.body.address.pincode,
-          street: req.body.address.street,
-          houseNumber: req.body.address.houseNumber
-      },
+      address : req.body.address,
       password: req.body.password,
-      confirmPassword: req.body.confirmPassword,
   })
+
+  console.log(UserPost);
+
     if (!UserPost.email || !UserPost.password)
       return res
         .status(400)
@@ -61,11 +75,7 @@ router.post("/", async (req, res) => {
       phoneNumber:UserPost.phoneNumber,
       gender:UserPost.gender,
       city:UserPost.city,
-      address : {
-        pincode: UserPost.address.pincode,
-        street: UserPost.address.street,
-        houseNumber: UserPost.address.houseNumber
-    },
+      address : UserPost.address,
       email:UserPost.email,
       password:passwordHash,
 
@@ -101,7 +111,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 router.post("/login", async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -112,7 +121,7 @@ router.post("/login", async (req, res) => {
         return res
           .status(400)
           .json({ errorMessage: "Please enter all required fields." });
-  
+          
       const existingUser = await User.findOne({ email });
       if (!existingUser)
         return res.status(401).json({ errorMessage: "Wrong email or password." });
@@ -158,6 +167,7 @@ router.post("/login", async (req, res) => {
       })
       .send('logged out');
   });
+
   router.get("/loggedIn", (req, res) => {
     try {
       const token = req.cookies.token;

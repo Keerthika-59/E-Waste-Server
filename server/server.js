@@ -23,12 +23,9 @@ require('./config/config.js');
 
 require('../server/routes/contactRoute.js')(app);
 require('../server/routes/userActivityRoute.js')(app);
-// require('../server/routes/userRoute.js')(app);
 app.use("/auth1",require("./routes/userRoute"))
-// require('../server/routes/repRoute.js')(app);
+
 app.use("/reps",require("./routes/repRoute"))
-// const repRouter = require('../server/routes/repRoute');
-// app.use('/reps', repRouter);
 app.use(express.static('images'));
 
 app.get('/', (req, res) => {

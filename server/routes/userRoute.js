@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     // const { email, password ,name,phoneNumber,gender,city,address} = req.body;
 
@@ -156,7 +156,7 @@ router.post("/login", async (req, res) => {
       res.status(500).send();
     }
   });
-  
+
   router.get("/logout", (req, res) => {
     res
       .cookie("token", "", {

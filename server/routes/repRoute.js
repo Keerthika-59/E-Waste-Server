@@ -42,7 +42,6 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
-
 let upload = multer({ storage, fileFilter });
 
 router.route('/add').post(upload.single('idProof'), async (req, res) => {
@@ -87,7 +86,7 @@ router.post("/login", async (req, res) => {
       const { email, password } = req.body;
   
       // validate
-  
+
       if (!email || !password)
         return res
           .status(400)

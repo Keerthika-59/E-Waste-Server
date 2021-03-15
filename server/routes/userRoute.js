@@ -156,7 +156,7 @@ router.post("/login", async (req, res) => {
       res.status(500).send();
     }
   });
-
+  
   router.get("/logout", (req, res) => {
     res
       .cookie("token", "", {

@@ -30,9 +30,11 @@ router.get("/", async (req, res) => {
     // res.status(500).send();
   }
 });
-router.post("/", async (req, res) => {
+
+router.post("/register", async (req, res) => {
   try {
     // const { email, password ,name,phoneNumber,gender,city,address} = req.body;
+
     const UserPost = new User({
       name : req.body.name,
       phoneNumber: req.body.phoneNumber,
@@ -41,8 +43,10 @@ router.post("/", async (req, res) => {
       city: req.body.city,
       address : req.body.address,
       password: req.body.password,
-      confirmPassword: req.body.confirmPassword,
   })
+
+  console.log(UserPost);
+
     if (!UserPost.email || !UserPost.password)
       return res
         .status(400)
@@ -107,7 +111,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 router.post("/login", async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -118,7 +121,7 @@ router.post("/login", async (req, res) => {
         return res
           .status(400)
           .json({ errorMessage: "Please enter all required fields." });
-  
+          
       const existingUser = await User.findOne({ email });
       if (!existingUser)
         return res.status(401).json({ errorMessage: "Wrong email or password." });
@@ -164,6 +167,7 @@ router.post("/login", async (req, res) => {
       })
       .send('logged out');
   });
+
   router.get("/loggedIn", (req, res) => {
     try {
       const token = req.cookies.token;

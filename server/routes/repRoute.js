@@ -86,11 +86,6 @@ router.post("/login", async (req, res) => {
       const { email, password } = req.body;
   
       // validate
-
-      if (!email || !password)
-        return res
-          .status(400)
-          .json({ errorMessage: "Please enter all required fields." });
   
       const existingUser = await Rep.findOne({ email });
       if (!existingUser)
@@ -113,7 +108,7 @@ router.post("/login", async (req, res) => {
       );
       return res.json(token)
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
         res.status(500).send();
       }
     });

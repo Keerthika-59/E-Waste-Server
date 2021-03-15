@@ -45,8 +45,6 @@ router.post("/signup", async (req, res) => {
       password: req.body.password,
   })
 
-  console.log(UserPost);
-
     if (!UserPost.email || !UserPost.password)
       return res
         .status(400)

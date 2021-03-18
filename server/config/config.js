@@ -10,7 +10,7 @@ mongoose.connect(MONGO_URI,
 })
 
 .then((msg) => {
-    console.log('Database connected success');
+    console.log('Database connected successfully');
 })
 .catch( err => {
     console.log('Database Connection Failed');

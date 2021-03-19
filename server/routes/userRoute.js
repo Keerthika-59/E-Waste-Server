@@ -149,19 +149,6 @@ router.post("/signup", async(req, res) => {
         res.send({
             msg: "Data entered successfully",
         });
-        // const token = jwt.sign(
-        //   {
-        //     user: savedUser._id,
-        //   },
-        //   process.env.JWT_SECRET
-        // );
-        // res
-        //   .cookie("token", token, {
-        //     httpOnly: true,
-        //     secure: true,     //sameSite:'none'->Cookies will be sent in all contexts, i.e in responses to both first-party
-        //     sameSite: "none",   ///////////and cross-origin requests.If SameSite=None is set,
-        //   })                    ///////////the cookie Secure attribute must also be set (or the cookie will be blocked).
-        //   .send('user created');
     } catch (err) {
         console.error(err);
         res.status(500).send("Failed to add");
@@ -214,8 +201,7 @@ router.post("/login", async(req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-    res
-        .cookie("token", "", {
+    res.cookie("token", "", {
             httpOnly: true,
             expires: new Date(0),
             secure: true,

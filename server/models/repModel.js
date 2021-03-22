@@ -1,54 +1,3 @@
-// const mongoose = require("mongoose");
-
-// const RepSchema = new mongoose.Schema({
-//     name: {
-//         type: String,
-//         required: true,
-//         min: 2,
-//         max: 20
-//     },
-
-//     phoneNumber: {
-//         type: Number,
-//         required: true
-//     },
-
-//     email: {
-//         type: String,
-//         required: true
-
-//     },
-
-//     gender: {
-//         type: String,
-//         required: true
-//     },
-
-//     identityProof: {
-//        type: String
-//     },
-
-//     city: {
-//         type: String,
-//         required: true
-//     },
-
-//     address: {
-//         type: String,
-//         required: true
-//     },
-
-//     // activity: RepActivitySchema,
-
-//     password: {
-//         type: String,
-//         required: true
-//     }
-
-// })
-
-// const Rep = mongoose.model('Rep', RepresentativeSchema);
-
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -79,8 +28,8 @@ const repSchema = new Schema({
     idProof: {
         type: String,
         // required: true
-            // data: Buffer,
-            // contentType: String
+        // data: Buffer,
+        // contentType: String
     },
 
     city: {
@@ -98,9 +47,18 @@ const repSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+
+    isVerified : {
+        type : Boolean,
+        default : false
+    },
+    
+    status : {
+        type : Boolean,
+        default : true
     }
 });
 
-const Rep = mongoose.model('Rep', repSchema);
-
-module.exports = Rep;
+const Representative = mongoose.model('Representative', repSchema);
+module.exports = Representative;

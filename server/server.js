@@ -23,7 +23,9 @@ require('./config/config.js');
 
 require('../server/routes/contactRoute.js')(app);
 require('../server/routes/userActivityRoute.js')(app);
+
 app.use("/auth1",require("./routes/userRoute"))
+app.use('/admin', require('./routes/admin.route'));
 
 app.use("/reps",require("./routes/repRoute"))
 app.use(express.static('images'));

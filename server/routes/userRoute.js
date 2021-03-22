@@ -125,7 +125,7 @@ router.post("/signup", async(req, res) => {
 
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(UserPost.password, salt);
-
+        
         // save a new user account to the db
 
         const newUser = new User({

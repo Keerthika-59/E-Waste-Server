@@ -5,6 +5,7 @@ const express = require('express');
 
 const User = require('../models/userModel');
 const Representative = require('../models/repModel');
+const Contact = require('../models/contactModel');
 
 // checker endpoint to check API
 exports.checker = async (req, res) => {
@@ -105,6 +106,21 @@ exports.verifyRepresentative = async (req, res) => {
 
         res.send({
             'message': 'Failed to Verify Representative'
+        })
+    }
+}
+
+// get all contacts
+exports.viewContacts = async (req, res) => {
+    try {
+        const data = await Contact.find({});
+
+        res.send(data);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Fetch Contact'
         })
     }
 }

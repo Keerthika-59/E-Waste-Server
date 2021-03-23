@@ -1,21 +1,31 @@
 const mongoose = require('mongoose');
-// const UserActivitySchema=require('./userActivityModel')
-const UserActivitySchema = new mongoose.Schema(
-    {
-        bioDegradable: Boolean,
-        nonBioDegradable: Boolean,
-        donation : [{
-            itemName : String,
-            category : String
-        }],
 
-        status: {
-            type: Boolean,
-            default: false
+
+const UserActivitySchema = new mongoose.Schema({
+
+    bioWaste: Boolean,
+    nonBioWaste: Boolean,
+
+    donation: [
+        {
+            name: String,
+            category: String
         }
+    ],
+
+    status: {
+        type: Boolean,
+        default: false
+    },
+
+    repId : {
+        type : String
     }
-)
+
+});
+
 const UserSchema = new mongoose.Schema({
+
     name: {
         type: String,
         required: true
@@ -46,11 +56,13 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
 
-    // activity: [UserActivitySchema],
-
     password: {
         type: String,
         required: true
-    }
-})
-module.exports = mongoose.model('User', UserSchema);
+    },
+    
+    activity: [UserActivitySchema]
+});
+
+const User = mongoose.model('User', UserSchema)
+module.exports = User;

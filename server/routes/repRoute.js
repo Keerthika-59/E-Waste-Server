@@ -25,10 +25,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, 'images');
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
     }
 });
@@ -44,7 +44,7 @@ const fileFilter = (req, file, cb) => {
 
 let upload = multer({ storage, fileFilter });
 
-router.route('/add').post(upload.single('idProof'), async (req, res) => {
+router.route('/add').post(upload.single('idProof'), async(req, res) => {
     const name = req.body.name;
     const phoneNumber = req.body.phoneNumber;
     const email = req.body.email;
@@ -70,7 +70,7 @@ router.route('/add').post(upload.single('idProof'), async (req, res) => {
         // idProof,
         city,
         address,
-        password:passwordHash
+        password: passwordHash
     }
 
 
@@ -81,8 +81,9 @@ router.route('/add').post(upload.single('idProof'), async (req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async(req, res) => {
     try {
+<<<<<<< HEAD
       const { email, password } = req.body;
   
       // validate
@@ -107,11 +108,82 @@ router.post("/login", async (req, res) => {
         process.env.JWT_SECRET
       );
       return res.json(token)
+=======
+        const { email, password } = req.body;
+
+        // validate
+
+        if (!email || !password)
+            return res
+                .status(400)
+                .json({ errorMessage: "Please enter all required fields." });
+
+        const existingUser = await Rep.findOne({ email });
+        if (!existingUser)
+            return res.status(401).json({ errorMessage: "Wrong email or password." });
+
+        const passwordCorrect = await bcrypt.compare(
+            password,
+            existingUser.password
+        );
+        if (!passwordCorrect)
+            return res.status(401).json({ errorMessage: "Wrong email or password." });
+
+        // sign the token
+
+        const token = jwt.sign({
+                user: existingUser._id,
+            },
+            process.env.JWT_SECRET
+        );
+        return res.json(token)
+>>>>>>> f82cc3cdd35257b60d44143eb54274b026f0ef21
     } catch (err) {
         console.error(err.message);
         res.status(500).send();
-      }
-    });
+    }
+});
+
+// router.put("/:repId", (req, res) => {
+//     Rep.findByIdAndUpdate(req.params.userId, {
+//             name: req.body.name,
+//             phoneNumber: req.body.phoneNumber,
+//             email: req.body.email,
+//             gender: req.body.gender,
+//             city: req.body.city,
+//             address: req.body.address,
+//             password: req.body.password,
+//         }, { new: true })
+//         .then(user => {
+//             if (!user) {
+//                 return res.status(404).send({
+//                     message: "user not found with id " + req.params.userId
+//                 });
+//             }
+//             res.send(user);
+//         }).catch(err => {
+//             if (err.kind === 'ObjectId') {
+//                 return res.status(404).send({
+//                     message: "user not found with id " + req.params.userId
+//                 });
+//             }
+//             return res.status(500).send({
+//                 message: "Error updating user with id " + req.params.userId
+//             });
+//         });
+
+// })
+
+
+router.post("/getId", (req, res) => {
+    try {
+        const { token } = req.body;
+        const id = jwt.verify(token, process.env.JWT_SECRET);
+        res.send(id.user);
+    } catch (e) {
+        console.log(e.message);
+    }
+});
 
 router.route('/').get(reps.getAll);
 

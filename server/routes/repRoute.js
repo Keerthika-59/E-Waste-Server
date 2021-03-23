@@ -49,7 +49,7 @@ router.route('/add').post(upload.single('idProof'), async(req, res) => {
     const phoneNumber = req.body.phoneNumber;
     const email = req.body.email;
     const gender = req.body.gender;
-    // const idProof = req.file.filename;
+    const idProof = req.file.filename;
     const city = req.body.city;
     const address = req.body.address;
     const password = req.body.password;
@@ -67,7 +67,7 @@ router.route('/add').post(upload.single('idProof'), async(req, res) => {
         phoneNumber,
         email,
         gender,
-        // idProof,
+        idProof,
         city,
         address,
         password: passwordHash

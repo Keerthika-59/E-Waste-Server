@@ -1,4 +1,4 @@
-const UserAct = require('../models/userActivityModel.js');
+const UserAct = require('../models/userModel.js');
 
 exports.create = (req, res) => {
     // if (!req.body.bioDegradable) {

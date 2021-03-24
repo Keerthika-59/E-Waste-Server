@@ -24,36 +24,21 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'images');
-    },
-    filename: function(req, file, cb) {
-        cb(null, uuidv4() + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
+router.post('/add',  async(req, res) => {
 
-const fileFilter = (req, file, cb) => {
-    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    if (allowedFileTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-}
-
-let upload = multer({ storage, fileFilter });
-
-router.route('/add').post(upload.single('idProof'), async(req, res) => {
     const name = req.body.name;
     const phoneNumber = req.body.phoneNumber;
     const email = req.body.email;
     const gender = req.body.gender;
+<<<<<<< Updated upstream
     const idProof = req.file.filename;
+=======
+    const idProof = req.body.idProof;
+>>>>>>> Stashed changes
     const city = req.body.city;
     const address = req.body.address;
     const password = req.body.password;
-    // console.log(req.file);
+    
     const existingUser = await Rep.findOne({ email });
     if (existingUser)
         return res.status(400).json({
@@ -76,9 +61,9 @@ router.route('/add').post(upload.single('idProof'), async(req, res) => {
 
     const newRep = new Rep(newRepData);
 
-    newRep.save()
-        .then(() => res.json('Representative Added'))
-        .catch(err => res.status(400).json('Error: ' + err));
+    await newRep.save()
+    .then(() => res.json('Representative Added'))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.post("/login", async(req, res) => {
@@ -91,7 +76,6 @@ router.post("/login", async(req, res) => {
             return res
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
-
         const existingUser = await Rep.findOne({ email });
         if (!existingUser)
             return res.status(401).json({ errorMessage: "Wrong email or password." });

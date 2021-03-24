@@ -40,7 +40,6 @@ exports.getAll = (req, res) => {
         });
 };
 
-
 // Find a single user with a userId
 exports.findOne = (req, res) => {
     User.findById(req.params.userId)

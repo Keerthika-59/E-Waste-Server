@@ -30,11 +30,7 @@ router.post('/add',  async(req, res) => {
     const phoneNumber = req.body.phoneNumber;
     const email = req.body.email;
     const gender = req.body.gender;
-<<<<<<< Updated upstream
-    const idProof = req.file.filename;
-=======
     const idProof = req.body.idProof;
->>>>>>> Stashed changes
     const city = req.body.city;
     const address = req.body.address;
     const password = req.body.password;

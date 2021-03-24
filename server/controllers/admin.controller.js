@@ -36,6 +36,24 @@ exports.viewUsers = async (req, res) => {
     }
 }
 
+exports.viewUsersById = async (req, res) => {
+
+    try {
+
+        const id = req.params.id;
+        const data = await User.findById(id);
+
+        res.send(data);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Delete'
+        })
+    }
+}
+
+
 // view all representatives
 exports.viewRepresentatives = async (req, res) => {
 
@@ -51,6 +69,27 @@ exports.viewRepresentatives = async (req, res) => {
         })
     }
 }
+
+exports.viewRepresentativesById = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+
+        console.log(id);
+
+        const response = await Representative.findById(id);
+        res.send(response.data[0]);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Delete'
+        })
+    }
+}
+
+
+
 // delete a user by ID
 exports.deleteUser = async (req, res) => {
 
@@ -69,6 +108,7 @@ exports.deleteUser = async (req, res) => {
         })
     }
 }
+
 
 // delete a representative by ID
 exports.deleteRepresentative = async (req, res) => {

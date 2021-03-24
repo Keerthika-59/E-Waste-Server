@@ -83,7 +83,6 @@ router.route('/add').post(upload.single('idProof'), async(req, res) => {
 
 router.post("/login", async(req, res) => {
     try {
-<<<<<<< HEAD
       const { email, password } = req.body;
   
       // validate
@@ -108,36 +107,6 @@ router.post("/login", async(req, res) => {
         process.env.JWT_SECRET
       );
       return res.json(token)
-=======
-        const { email, password } = req.body;
-
-        // validate
-
-        if (!email || !password)
-            return res
-                .status(400)
-                .json({ errorMessage: "Please enter all required fields." });
-
-        const existingUser = await Rep.findOne({ email });
-        if (!existingUser)
-            return res.status(401).json({ errorMessage: "Wrong email or password." });
-
-        const passwordCorrect = await bcrypt.compare(
-            password,
-            existingUser.password
-        );
-        if (!passwordCorrect)
-            return res.status(401).json({ errorMessage: "Wrong email or password." });
-
-        // sign the token
-
-        const token = jwt.sign({
-                user: existingUser._id,
-            },
-            process.env.JWT_SECRET
-        );
-        return res.json(token)
->>>>>>> f82cc3cdd35257b60d44143eb54274b026f0ef21
     } catch (err) {
         console.error(err.message);
         res.status(500).send();

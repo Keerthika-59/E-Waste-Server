@@ -16,11 +16,11 @@ const router = require('express').Router();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 let path = require('path');
-let Rep = require('../models/repModel');
 const reps = require('../controllers/repController.js');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const Representative = require('../models/repModel');
 
 dotenv.config();
 
@@ -35,7 +35,7 @@ router.post('/add',  async(req, res) => {
     const address = req.body.address;
     const password = req.body.password;
     
-    const existingUser = await Rep.findOne({ email });
+    const existingUser = await Representative.findOne({ email });
     if (existingUser)
         return res.status(400).json({
             errorMessage: "An account with this email already exists.",
@@ -126,7 +126,6 @@ router.post("/login", async(req, res) => {
 //         });
 
 // })
-
 
 router.post("/getId", (req, res) => {
     try {

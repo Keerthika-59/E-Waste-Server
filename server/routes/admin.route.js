@@ -4,6 +4,7 @@ const router = express.Router();
 const { checker, deleteUser, LogOut, deleteRepresentative, postCredentials, verifyRepresentative, viewUsers, viewRepresentatives, viewContacts, viewUsersById, viewRepresentativesById} = require('../controllers/admin.controller')
 
 router.get('/', checker);
+
 router.get('/users', viewUsers);
 router.get('/representatives', viewRepresentatives);
 router.get('/users/:id', viewUsersById);

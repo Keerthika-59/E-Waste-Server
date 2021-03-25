@@ -110,16 +110,24 @@ exports.viewActivities = async (req, res) => {
     }
 }
 
-const getActivity = async (id) => {
+const getPendingActivity = async (id) => {
 
     const data = await Activity.findById(id);
-    if(data) {
+    if(!data.status) {
         return data;
 
     }
 }
 
-exports.viewUsersById = async (req, res) => {
+const getCompletedActivity = async (id) => {
+
+    const data = await Activity.findById(id);
+    if (data.status) {
+        return data;
+
+    }
+}
+exports.viewPendingActivities = async (req, res) => {
 
     try {
         const id = req.params.id;
@@ -133,7 +141,7 @@ exports.viewUsersById = async (req, res) => {
 
         for(let i=0; i < len; i++) {
             let act_id = response.activity[i];
-            let datas = await getActivity(act_id);
+            let datas = await getPendingActivity(act_id);
             // console.log(datas);
 
             userActivities.push(datas);
@@ -149,6 +157,36 @@ exports.viewUsersById = async (req, res) => {
     }
 }
 
+
+exports.viewCompletedActivities = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+
+        const response = await User.findById(id);
+
+        let len = response.activity.length;
+        console.log(len);
+
+        let userActivities = [];
+
+        for (let i = 0; i < len; i++) {
+            let act_id = response.activity[i];
+            let datas = await getCompletedActivity(act_id);
+            // console.log(datas);
+
+            userActivities.push(datas);
+        }
+
+        res.send({ response, user_activities: userActivities });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to View'
+        })
+    }
+}
 
 exports.viewRepresentativesById = async (req, res) => {
 

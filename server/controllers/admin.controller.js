@@ -2,15 +2,16 @@
 // delete repersentative
 // mark represenattive as verified
 const express = require('express');
+const jwt = require("jsonwebtoken");
 
 const User = require('../models/userModel');
 const Representative = require('../models/repModel');
 const Contact = require('../models/contactModel');
+const Admin = require('../models/adminModel');
 
 // checker endpoint to check API
 exports.checker = async (req, res) => {
-    try {
-        
+    try {   
         res.send({
             'message' : 'Hello I am Admin'
         })
@@ -20,6 +21,47 @@ exports.checker = async (req, res) => {
         })
     }
 }
+
+exports.postCredentials = async (req, res) => {
+    try {
+
+        const {email, password} = req.body;
+
+        if(!email || !password) {
+            return res.status(400)
+                .json({ errorMessage: "Please enter all required fields." });
+        }
+
+        const existingUser = await Admin.findOne({ email : email });
+
+        // sign the token
+        const token = jwt.sign({
+            user: existingUser._id,
+        },
+            process.env.JWT_SECRET
+        );
+
+        if(existingUser.email === email && existingUser.password === password) {
+            res.json(token);
+        }
+        
+        return res.status(401).json({ errorMessage: "Invalid Email or Password." });
+
+    } catch (error) {
+        res.status(500).send();
+    }
+}
+
+exports.LogOut =  (req, res) => {
+
+    res.cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(0),
+        secure: true,
+        sameSite: "none",
+    }).send("logged out");
+};
+
 // view all users
 exports.viewUsers = async (req, res) => {
 
@@ -36,6 +78,24 @@ exports.viewUsers = async (req, res) => {
     }
 }
 
+exports.viewUsersById = async (req, res) => {
+
+    try {
+
+        const id = req.params.id;
+        const data = await User.findById(id);
+
+        res.send(data);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Delete'
+        })
+    }
+}
+
+
 // view all representatives
 exports.viewRepresentatives = async (req, res) => {
 
@@ -51,6 +111,27 @@ exports.viewRepresentatives = async (req, res) => {
         })
     }
 }
+
+exports.viewRepresentativesById = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+
+        console.log(id);
+
+        const response = await Representative.findById(id);
+        res.send(response.data[0]);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Delete'
+        })
+    }
+}
+
+
+
 // delete a user by ID
 exports.deleteUser = async (req, res) => {
 
@@ -69,6 +150,7 @@ exports.deleteUser = async (req, res) => {
         })
     }
 }
+
 
 // delete a representative by ID
 exports.deleteRepresentative = async (req, res) => {

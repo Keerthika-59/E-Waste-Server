@@ -1,30 +1,66 @@
 const UserAct = require('../models/userModel.js');
 
-exports.create = (req, res) => {
-    // if (!req.body.bioDegradable) {
-    //     return res.status(400).send({
-    //         message: "Please enter Activity details"
-    //     });
-    // }
+const {Activity, User}  = require('../models/userModel');
+const Representative = require('../models/repModel');
 
-    const userAct = new UserAct({
-        bioDegradable: req.body.bioDegradable,
-        nonBioDegradable: req.body.nonBioDegradable,
-        donation: {
-            itemName: req.body.donation.itemName,
-            category: req.body.donation.category
+exports.createActivity = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+
+        // assigning representative if there is some representative
+        let assigned = false;
+        const Userdata = await User.findById(id);
+
+        console.log('First-----');
+
+        const Reps = await Representative.findOne({ status : true, city : Userdata.city});
+
+        await Representative.findByIdAndUpdate(id, {
+            status : false
+        })
+
+        if (Reps) {
+            const activityData = new Activity(req.body);
+            assigned = true;
+
+            activityData.repDetails.repId = Reps._id;
+            activityData.repDetails.repName = Reps.name;
+            activityData.repDetails.repPhoneNumber = Reps.phoneNumber;
+            
+            activityData.userDetails.userId = Userdata._id;
+            activityData.userDetails.userName = Userdata.name;
+            activityData.userDetails.userPhoneNumber = Userdata.phoneNumber;
+            activityData.userDetails.userAddress = Userdata.address;
+
+            await activityData.save();
+
+            Reps.activity.push(activityData);
+
+            Userdata.activity.push(activityData);
+
+            await Userdata.save();
+            await Reps.save();
+
+            res.send({
+                assigned : true,
+                repID : Reps._id
+            })
+
         }
-    });
-    console.log(userAct);
-    userAct.save()
-        .then(oUserAct => {
-            res.send(oUserAct);
-        }).catch(err => {
+
+        else {
             res.status(500).send({
-                message: err.message || "Error occurred while creating the user Activity details"
-            });
-        });
-};
+               assigned : false
+            })
+        }
+
+    } catch (error) {
+        res.status(500).send({            
+            'msg': 'Error Occured'
+        })
+    }
+}
 
 exports.getAll = (req, res) => {
     UserAct.find({})

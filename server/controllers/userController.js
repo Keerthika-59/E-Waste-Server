@@ -1,5 +1,5 @@
-const User = require('../models/userModel.js');
-
+const { User } = require('../models/userModel');
+const mongoose = require('mongoose');
 
 exports.create = (req, res) => {
     // if (!req.body.name) {
@@ -41,15 +41,18 @@ exports.getAll = (req, res) => {
 };
 
 // Find a single user with a userId
-exports.findOne = (req, res) => {
-    User.findById(req.params.userId)
-        .then(user => {
+exports.findOne = async (req, res) => {
+    await User.findById(req.params.id)
+    .then(user => {
             if (!user) {
                 return res.status(404).send({
                     message: "User not found with id " + req.params.userId
                 });
             }
-            res.send(user);
+            else {
+                console.log(user);
+                res.send(user);
+            }
         }).catch(err => {
             if (err.kind === 'ObjectId') {
                 return res.status(404).send({

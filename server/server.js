@@ -20,7 +20,6 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
 require('./config/config.js');
-
 require('../server/routes/contactRoute.js')(app);
 require('../server/routes/userActivityRoute.js')(app);
 

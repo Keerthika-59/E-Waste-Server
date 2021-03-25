@@ -1,7 +1,8 @@
 module.exports = (app) => {
     const userAct = require('../controllers/userActivityController.js');
-
-    app.post('/userAct', userAct.create);
+    
+    // create new activity for a user
+    app.post('/activity/:id', userAct.createActivity);
 
     app.get('/userAct', userAct.getAll);
 

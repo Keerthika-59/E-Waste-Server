@@ -1,27 +1,38 @@
 const mongoose = require('mongoose');
 
+const Representative = require('./repModel');
 
 const UserActivitySchema = new mongoose.Schema({
 
     bioWaste: Boolean,
     nonBioWaste: Boolean,
-
-    donation: [
-        {
-            name: String,
-            category: String
-        }
-    ],
+    donation: Boolean,
 
     status: {
         type: Boolean,
         default: false
     },
 
-    repId : {
-        type : String
-    }
+    userDetails : {
+        userName: String,
+        userPhoneNumber: String,
+        userAddress: String,
 
+        userId: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    },
+
+    repDetails: {
+        repName: String,
+        repPhoneNumber: String,
+
+        repId: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Representative'
+        }
+    }
 });
 
 const UserSchema = new mongoose.Schema({
@@ -63,9 +74,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    
-    activity: [UserActivitySchema]
+    activity: [ 
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Activity'
+        }
+    ]
 });
 
-const User = mongoose.model('User', UserSchema)
-module.exports = User;
+const User = mongoose.model('User', UserSchema);
+const Activity = mongoose.model('Activity', UserActivitySchema);
+
+module.exports = {
+    User,
+    Activity
+};

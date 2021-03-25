@@ -140,7 +140,7 @@ router.post("/getId", (req, res) => {
 
 router.route('/').get(reps.getAll);
 
-router.route('/:repId').get(reps.findOne);
+router.route('/:id').get(reps.findOne);
 
 router.route('/:repId').put(reps.update);
 

@@ -45,7 +45,7 @@ exports.postCredentials = async (req, res) => {
         if(existingUser.email === email && existingUser.password === password) {
             res.json(token);
         }
-        
+
         return res.status(401).json({ errorMessage: "Invalid Email or Password." });
 
     } catch (error) {
@@ -79,24 +79,6 @@ exports.viewUsers = async (req, res) => {
     }
 }
 
-exports.viewUsersById = async (req, res) => {
-
-    try {
-
-        const id = req.params.id;
-        const data = await User.findById(id);
-
-        res.send(data);
-
-    } catch (error) {
-
-        res.send({
-            'message': 'Failed to Delete'
-        })
-    }
-}
-
-
 // view all representatives
 exports.viewRepresentatives = async (req, res) => {
 
@@ -112,6 +94,61 @@ exports.viewRepresentatives = async (req, res) => {
         })
     }
 }
+
+exports.viewActivities = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+        const data = await Activity.findById(id);
+        res.send(data);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to get Activities'
+        })
+    }
+}
+
+const getActivity = async (id) => {
+
+    const data = await Activity.findById(id);
+    if(data) {
+        return data;
+
+    }
+}
+
+exports.viewUsersById = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+
+        const response = await User.findById(id);
+
+        let len = response.activity.length;
+        console.log(len);
+
+        let userActivities = [];
+
+        for(let i=0; i < len; i++) {
+            let act_id = response.activity[i];
+            let datas = await getActivity(act_id);
+            // console.log(datas);
+
+            userActivities.push(datas);
+        }
+
+        res.send({ response, user_activities: userActivities });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to View'
+        })
+    }
+}
+
 
 exports.viewRepresentativesById = async (req, res) => {
 
@@ -131,8 +168,6 @@ exports.viewRepresentativesById = async (req, res) => {
     }
 }
 
-
-
 // delete a user by ID
 exports.deleteUser = async (req, res) => {
 
@@ -151,7 +186,6 @@ exports.deleteUser = async (req, res) => {
         })
     }
 }
-
 
 // delete a representative by ID
 exports.deleteRepresentative = async (req, res) => {

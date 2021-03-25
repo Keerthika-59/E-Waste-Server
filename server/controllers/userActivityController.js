@@ -90,13 +90,12 @@ exports.getPendingActivities = async (req, res) => {
     }
 }
 
-
 exports.getCompletedActivities = async (req, res) => {
 
     try {
 
         const completedActivities = await Activity.find({ status: true});
-
+        
         res.send(completedActivities);
 
     } catch (error) {

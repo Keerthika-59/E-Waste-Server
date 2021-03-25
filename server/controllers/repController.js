@@ -1,4 +1,4 @@
-const Rep = require('../models/repModel.js');
+const Representative = require('../models/repModel.js');
 // const multer = require('multer');
 // const { v4: uuidv4 } = require('uuid');
 // let path = require('path');
@@ -63,27 +63,21 @@ exports.getAll = (req, res) => {
         });
 };
 
-
 // Find a single representative with a representativeId
-exports.findOne = (req, res) => {
-    Rep.findById(req.params.repId)
-        .then(oRep => {
-            if (!oRep) {
-                return res.status(404).send({
-                    message: "Representative not found with id " + req.params.repId
-                });
-            }
-            res.send(oRep);
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).send({
-                    message: "Representative not found with id " + req.params.repId
-                });
-            }
-            return res.status(500).send({
-                message: "Error retrieving Representative with id " + req.params.repId
-            });
+exports.findOne =  async (req, res) => {
+    try {
+        
+        const id = req.params.id;
+
+        const data = await Representative.findById(id);
+
+        res.send(data);
+
+    } catch (error) {
+        res.status(500).send({
+            'message': "Not Found"
         });
+    }
 };
 
 // Update a Representative identified by the RepresentativeId in the request

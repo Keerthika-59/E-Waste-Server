@@ -14,7 +14,7 @@
 // }
 const dotenv = require("dotenv");
 const router = require("express").Router();
-const User = require("../models/userModel");
+const { User } = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -31,25 +31,22 @@ router.get("/", async(req, res) => {
     }
 });
 
-router.get("/user/:userId", async(req, res) => {
-    User.findById(req.params.userId)
-        .then(user => {
-            if (!user) {
-                return res.status(404).json({
-                    message: "User not found with id " + req.params.userId
-                });
-            }
-            res.send(user);
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).json({
-                    message: "User not found with id " + req.params.userId
-                });
-            }
-            return res.status(500).json({
-                message: "Error retrieving user with id " + req.params.userId
-            });
-        });
+router.get("/user/:id", async(req, res) => {
+    try {
+
+        const id = req.params.id;
+        const data = await User.findById(id);
+
+        console.log(data);
+
+        res.send(data);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'No User Found'
+        })
+    }
 })
 router.put("/user/:userId", (req, res) => {
     User.findByIdAndUpdate(req.params.userId, {

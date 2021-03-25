@@ -74,6 +74,38 @@ exports.getAll = (req, res) => {
         });
 };
 
+exports.getPendingActivities = async (req, res) => {
+
+    try {
+
+        const pendingActivities = await Activity.find({status : false});
+
+        res.send(pendingActivities);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Get Any Pending Activity'
+        })
+    }
+}
+
+
+exports.getCompletedActivities = async (req, res) => {
+
+    try {
+
+        const completedActivities = await Activity.find({ status: true});
+
+        res.send(completedActivities);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Get Any Completed Activity'
+        })
+    }
+}
 
 // Find a single user with a actId
 exports.findOne = (req, res) => {

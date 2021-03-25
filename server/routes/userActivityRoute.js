@@ -6,6 +6,9 @@ module.exports = (app) => {
 
     app.get('/userAct', userAct.getAll);
 
+    app.get('/activities/pending', userAct.getPendingActivities);
+    app.get('/activities/completed', userAct.getCompletedActivities);
+    
     // Retrieve a single Note with noteId
     app.get('/userAct/:actId', userAct.findOne);
 

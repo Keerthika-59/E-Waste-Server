@@ -4,10 +4,11 @@
 const express = require('express');
 const jwt = require("jsonwebtoken");
 
-const User = require('../models/userModel');
 const Representative = require('../models/repModel');
 const Contact = require('../models/contactModel');
 const Admin = require('../models/adminModel');
+
+const { User, Activity} = require('../models/userModel');
 
 // checker endpoint to check API
 exports.checker = async (req, res) => {
@@ -63,11 +64,11 @@ exports.LogOut =  (req, res) => {
 };
 
 // view all users
+
 exports.viewUsers = async (req, res) => {
 
     try {
         const data = await User.find({});
-
         res.send(data);
 
     } catch (error) {

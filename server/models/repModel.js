@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+const { Activity } = require('./userModel');
+
 const repSchema = new Schema({
     name: {
         type: String,
@@ -26,12 +28,9 @@ const repSchema = new Schema({
     },
 
     idProof: {
-        type: String,
-        // required: true
-        // data: Buffer,
-        // contentType: String
+        type: String
     },
-
+    
     city: {
         type: String,
         required: true
@@ -42,8 +41,6 @@ const repSchema = new Schema({
         required: true
     },
 
-    // activity: RepActivitySchema,
-
     password: {
         type: String,
         required: true
@@ -53,12 +50,20 @@ const repSchema = new Schema({
         type : Boolean,
         default : false
     },
-    
+
     status : {
         type : Boolean,
         default : true
-    }
+    },
+    
+    activity: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Activity'
+        }
+    ]
 });
 
 const Representative = mongoose.model('Representative', repSchema);
+
 module.exports = Representative;

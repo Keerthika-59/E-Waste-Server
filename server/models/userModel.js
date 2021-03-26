@@ -1,76 +1,91 @@
 const mongoose = require("mongoose");
 
-const currentDate = () => {
-  const test = new Date();
-  return test.toLocaleString();
-};
+const Representative = require('./repModel');
 
 const UserActivitySchema = new mongoose.Schema({
-  bioWaste: Boolean,
-  nonBioWaste: Boolean,
-  placedOn: {
-    type: String,
-    default: currentDate,
-  },
-  donation:Boolean,
-//   donation: 
-//     {
-//       name: String,
-//       category: String,
-//     },
-  type1:Boolean,
-  type2:Boolean,
-  type3:Boolean,
-  type4:Boolean,
-  type5:Boolean,
-  status: {
-    type: Boolean,
-    default: false,
-  },
 
-  repId: {
-    type: String,
-  },
+    bioWaste: Boolean,
+    nonBioWaste: Boolean,
+    donation: Boolean,
+
+    status: {
+        type: Boolean,
+        default: false
+    },
+
+    userDetails : {
+        userName: String,
+        userPhoneNumber: String,
+        userAddress: String,
+
+        userId: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    },
+
+    repDetails: {
+        repName: String,
+        repPhoneNumber: String,
+
+        repId: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Representative'
+        }
+    }
 });
 
 const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
 
-  phoneNumber: {
-    type: Number,
-    required: true,
-  },
+    name: {
+        type: String,
+        required: true,
+        min: 2,
+        max: 20
+    },
 
-  email: {
-    type: String,
-    required: true,
-  },
+    phoneNumber: {
+        type: String,
+        required: true,
+        exact: 10
+    },
 
-  gender: {
-    type: String,
-    required: true,
-  },
+    email: {
+        type: String,
+        required: true
+    },
 
-  city: {
-    type: String,
-    required: true,
-  },
+    gender: {
+        type: String,
+        required: true
+    },
 
-  address: {
-    type: String,
-    required: true,
-  },
+    city: {
+        type: String,
+        required: true
+    },
 
-  password: {
-    type: String,
-    required: true,
-  },
+    address: {
+        type: String,
+        required: true
+    },
 
-  activity: [UserActivitySchema],
+    password: {
+        type: String,
+        required: true
+    },
+    activity: [ 
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Activity'
+        }
+    ]
 });
 
-const User = mongoose.model("User", UserSchema);
-module.exports = User;
+const User = mongoose.model('User', UserSchema);
+const Activity = mongoose.model('Activity', UserActivitySchema);
+
+module.exports = {
+    User,
+    Activity
+};

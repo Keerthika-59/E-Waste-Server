@@ -4,10 +4,11 @@
 const express = require('express');
 const jwt = require("jsonwebtoken");
 
-const User = require('../models/userModel');
 const Representative = require('../models/repModel');
 const Contact = require('../models/contactModel');
 const Admin = require('../models/adminModel');
+
+const { User, Activity} = require('../models/userModel');
 
 // checker endpoint to check API
 exports.checker = async (req, res) => {
@@ -44,7 +45,7 @@ exports.postCredentials = async (req, res) => {
         if(existingUser.email === email && existingUser.password === password) {
             res.json(token);
         }
-        
+
         return res.status(401).json({ errorMessage: "Invalid Email or Password." });
 
     } catch (error) {
@@ -63,11 +64,11 @@ exports.LogOut =  (req, res) => {
 };
 
 // view all users
+
 exports.viewUsers = async (req, res) => {
 
     try {
         const data = await User.find({});
-
         res.send(data);
 
     } catch (error) {
@@ -77,24 +78,6 @@ exports.viewUsers = async (req, res) => {
         })
     }
 }
-
-exports.viewUsersById = async (req, res) => {
-
-    try {
-
-        const id = req.params.id;
-        const data = await User.findById(id);
-
-        res.send(data);
-
-    } catch (error) {
-
-        res.send({
-            'message': 'Failed to Delete'
-        })
-    }
-}
-
 
 // view all representatives
 exports.viewRepresentatives = async (req, res) => {
@@ -112,15 +95,119 @@ exports.viewRepresentatives = async (req, res) => {
     }
 }
 
-exports.viewRepresentativesById = async (req, res) => {
+exports.viewActivities = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+        const data = await Activity.findById(id);
+        res.send(data);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to get Activities'
+        })
+    }
+}
+
+const getPendingActivity = async (id) => {
+
+    const data = await Activity.findById(id);
+    if(!data.status) {
+        return data;
+
+    }
+}
+
+const getCompletedActivity = async (id) => {
+
+    const data = await Activity.findById(id);
+    if (data.status) {
+        return data;
+
+    }
+}
+exports.viewPendingActivities = async (req, res) => {
+    
+    try {
+        const id = req.params.id;
+
+        const response = await User.findById(id);
+
+        let len = response.activity.length;
+        console.log(len);
+        let userActivities = [];
+
+        for(let i=0; i < len; i++) {
+            let act_id = response.activity[i];
+            let datas = await getPendingActivity(act_id);
+
+            if(datas)
+                userActivities.push(datas);
+        }
+
+        res.send({ response, user_activities: userActivities });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to View'
+        })
+    }
+}
+
+exports.viewCompletedActivities = async (req, res) => {
 
     try {
         const id = req.params.id;
 
+        const response = await User.findById(id);
+
+        let len = response.activity.length;
+        console.log(len);
+
+        let userActivities = [];
+
+        for (let i = 0; i < len; i++) {
+            let act_id = response.activity[i];
+            let datas = await getCompletedActivity(act_id);
+            // console.log(datas);
+
+            if(datas)
+                userActivities.push(datas);
+        }
+        
+        res.send({ response, user_activities: userActivities });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to View'
+        })
+    }
+}
+
+exports.completeActivity = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+        
         console.log(id);
 
-        const response = await Representative.findById(id);
-        res.send(response.data[0]);
+        await Activity.findByIdAndUpdate(id, {
+            status : true
+        }); 
+
+        const data = await Activity.findById(id);
+
+        const rep_id = data.repDetails.repId;
+
+        await Representative.findByIdAndUpdate(rep_id, {
+            status : true
+        })
+        res.send({
+            'message': 'Activity Completed'
+        });
 
     } catch (error) {
 
@@ -130,7 +217,23 @@ exports.viewRepresentativesById = async (req, res) => {
     }
 }
 
+exports.viewRepresentativesById = async (req, res) => {
 
+    try {
+        const id = req.params.id;
+
+        console.log(id);
+
+        const response = await Representative.findById(id);
+        res.send(response);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Delete'
+        })
+    }
+}
 
 // delete a user by ID
 exports.deleteUser = async (req, res) => {
@@ -151,7 +254,6 @@ exports.deleteUser = async (req, res) => {
     }
 }
 
-
 // delete a representative by ID
 exports.deleteRepresentative = async (req, res) => {
 
@@ -170,6 +272,26 @@ exports.deleteRepresentative = async (req, res) => {
         })
     }
 }
+
+// delete contacts by Contact Id
+exports.deleteContacts = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+        await Contact.findByIdAndDelete(id);
+
+        res.send({
+            'message': 'Contact Deleted Successfully'
+        });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Delete Contact'
+        })
+    }
+}
+
 
 // verify a representative
 exports.verifyRepresentative = async (req, res) => {
@@ -191,6 +313,25 @@ exports.verifyRepresentative = async (req, res) => {
         })
     }
 }
+
+// get all unverified representatives
+
+exports.unverifiedRepresentatives = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+        const data = await Representative.find({isVerified : false});
+
+        res.send(data);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Get Unverified Representatives'
+        })
+    }
+}
+
 
 // get all contacts
 exports.viewContacts = async (req, res) => {

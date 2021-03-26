@@ -16,11 +16,11 @@ const router = require('express').Router();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 let path = require('path');
-let Rep = require('../models/repModel');
 const reps = require('../controllers/repController.js');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const Representative = require('../models/repModel');
 
 dotenv.config();
 
@@ -35,7 +35,7 @@ router.post('/add',  async(req, res) => {
     const address = req.body.address;
     const password = req.body.password;
     
-    const existingUser = await Rep.findOne({ email });
+    const existingUser = await Representative.findOne({ email });
     if (existingUser)
         return res.status(400).json({
             errorMessage: "An account with this email already exists.",
@@ -72,7 +72,14 @@ router.post("/login", async(req, res) => {
             return res
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
-        const existingUser = await Rep.findOne({ email });
+        const existingUser = await Representative.findOne({ email });
+
+        // console.log(existingUser);
+
+        if(!existingUser.isVerified) {
+            return res.status(401).json({ errorMessage: "Representative is Not Verified" });
+        }
+
         if (!existingUser)
             return res.status(401).json({ errorMessage: "Wrong email or password." });
 
@@ -92,7 +99,7 @@ router.post("/login", async(req, res) => {
         );
         return res.json(token)
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
         res.status(500).send();
     }
 });
@@ -127,7 +134,6 @@ router.post("/login", async(req, res) => {
 
 // })
 
-
 router.post("/getId", (req, res) => {
     try {
         const { token } = req.body;
@@ -140,7 +146,7 @@ router.post("/getId", (req, res) => {
 
 router.route('/').get(reps.getAll);
 
-router.route('/:repId').get(reps.findOne);
+router.route('/:id').get(reps.findOne);
 
 router.route('/:repId').put(reps.update);
 

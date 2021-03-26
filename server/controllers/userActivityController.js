@@ -1,30 +1,66 @@
 const UserAct = require('../models/userModel.js');
 
-exports.create = (req, res) => {
-    // if (!req.body.bioDegradable) {
-    //     return res.status(400).send({
-    //         message: "Please enter Activity details"
-    //     });
-    // }
+const {Activity, User}  = require('../models/userModel');
+const Representative = require('../models/repModel');
 
-    const userAct = new UserAct({
-        bioDegradable: req.body.bioDegradable,
-        nonBioDegradable: req.body.nonBioDegradable,
-        donation: {
-            itemName: req.body.donation.itemName,
-            category: req.body.donation.category
+exports.createActivity = async (req, res) => {
+
+    try {
+
+        const id = req.params.id;
+        // assigning representative if there is some representative
+        let assigned = false;
+        const Userdata = await User.findById(id);
+
+        console.log('First-----');
+
+        const Reps = await Representative.findOne({ status : true, city : Userdata.city});
+
+        if (Reps) {
+
+            await Representative.findByIdAndUpdate(Reps._id, {
+                status: false
+            })
+
+            const activityData = new Activity(req.body);
+            assigned = true;
+
+            activityData.repDetails.repId = Reps._id;
+            activityData.repDetails.repName = Reps.name;
+            activityData.repDetails.repPhoneNumber = Reps.phoneNumber;
+            
+            activityData.userDetails.userId = Userdata._id;
+            activityData.userDetails.userName = Userdata.name;
+            activityData.userDetails.userPhoneNumber = Userdata.phoneNumber;
+            activityData.userDetails.userAddress = Userdata.address;
+
+            await activityData.save();
+            Reps.activity.push(activityData);
+
+            Userdata.activity.push(activityData);
+
+            await Userdata.save();
+            await Reps.save();
+
+            res.send({
+                assigned : true,
+                repID : Reps._id
+            })
+
         }
-    });
-    console.log(userAct);
-    userAct.save()
-        .then(oUserAct => {
-            res.send(oUserAct);
-        }).catch(err => {
+
+        else {
             res.status(500).send({
-                message: err.message || "Error occurred while creating the user Activity details"
-            });
-        });
-};
+               assigned : false
+            })
+        }
+
+    } catch (error) {
+        res.status(500).send({            
+            'msg': 'Error Occured'
+        })
+    }
+}
 
 exports.getAll = (req, res) => {
     UserAct.find({})
@@ -38,6 +74,116 @@ exports.getAll = (req, res) => {
         });
 };
 
+
+const getPendingActivity = async (id) => {
+
+    const data = await Activity.findById(id);
+    if (!data.status) {
+        return data;
+
+    }
+}
+
+const getCompletedActivity = async (id) => {
+
+    const data = await Activity.findById(id);
+    if (data.status) {
+        return data;
+
+    }
+}
+
+exports.getRepresentativePendingActivities = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const response = await Representative.findById(id);
+
+        let len = response.activity.length;
+        // console.log(len);
+
+        let userActivities = [];
+
+        for (let i = 0; i < len; i++) {
+            let act_id = response.activity[i];
+            let datas = await getPendingActivity(act_id);
+
+            if (datas)
+                userActivities.push(datas);
+        }
+
+        res.send({ response, user_activities: userActivities });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to View'
+        })
+    }
+}
+
+exports.getRepresentativeCompletedActivities = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const response = await Representative.findById(id);
+
+        let len = response.activity.length;
+        // console.log(len);
+
+        let userActivities = [];
+
+        for (let i = 0; i < len; i++) {
+            let act_id = response.activity[i];
+            let datas = await getCompletedActivity(act_id);
+
+            if (datas)
+                userActivities.push(datas);
+        }
+        
+        res.send({ response, user_activities: userActivities });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to View'
+        })
+    }
+}
+
+// get all pending activities
+exports.getPendingActivities = async (req, res) => {
+
+    try {
+
+        const pendingActivities = await Activity.find({ status: false });
+
+        res.send(pendingActivities);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Get Any Pending Activity'
+        })
+    }
+}
+
+// get all completed activities
+exports.getCompletedActivities = async (req, res) => {
+    
+    try {
+
+        const completedActivities = await Activity.find({ status: true});
+        
+        res.send(completedActivities);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Get Any Completed Activity'
+        })
+    }
+}
 
 // Find a single user with a actId
 exports.findOne = (req, res) => {

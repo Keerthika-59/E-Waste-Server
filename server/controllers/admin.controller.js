@@ -188,10 +188,10 @@ exports.viewCompletedActivities = async (req, res) => {
 }
 
 exports.completeActivity = async (req, res) => {
-    
+
     try {
         const id = req.params.id;
-
+        
         console.log(id);
 
         await Activity.findByIdAndUpdate(id, {

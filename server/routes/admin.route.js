@@ -17,6 +17,7 @@ router.get('/contacts', viewContacts);
 
 router.get('/activity/:id', viewActivities);
 router.get('/activity/complete/:id', completeActivity);
+
 router.get('/representatives/unverified', unverifiedRepresentatives);
 
 router.put('/representative/:id', verifyRepresentative );

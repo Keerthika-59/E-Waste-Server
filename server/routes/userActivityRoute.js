@@ -11,7 +11,8 @@ module.exports = (app) => {
     
     app.get('/representative/pending/:id', userAct.getRepresentativePendingActivities);
     app.get('/representative/completed/:id', userAct.getRepresentativeCompletedActivities);
-        
+
+
     // app.get('/activity/complete/:id',  )
     
     // Retrieve a single Note with noteId

@@ -128,7 +128,7 @@ const getCompletedActivity = async (id) => {
     }
 }
 exports.viewPendingActivities = async (req, res) => {
-
+    
     try {
         const id = req.params.id;
 
@@ -188,6 +188,36 @@ exports.viewCompletedActivities = async (req, res) => {
     }
 }
 
+exports.completeActivity = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+
+        console.log(id);
+
+        await Activity.findByIdAndUpdate(id, {
+            status : true
+        }); 
+
+        const data = await Activity.findById(id);
+
+        const rep_id = data.repDetails.repId;
+
+        await Representative.findByIdAndUpdate(rep_id, {
+            status : true
+        })
+        res.send({
+            'message': 'Activity Completed'
+        });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Delete'
+        })
+    }
+}
+
 exports.viewRepresentativesById = async (req, res) => {
 
     try {
@@ -196,7 +226,7 @@ exports.viewRepresentativesById = async (req, res) => {
         console.log(id);
 
         const response = await Representative.findById(id);
-        res.send(response.data[0]);
+        res.send(response);
 
     } catch (error) {
 

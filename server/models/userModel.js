@@ -1,13 +1,25 @@
 const mongoose = require("mongoose");
 
 const Representative = require('./repModel');
+const currentDate = () => {
+  const test = new Date();
+  return test.toLocaleString();
+};
 
 const UserActivitySchema = new mongoose.Schema({
+  placedOn: {
+    type: String,
+    default: currentDate,
+  },
 
     bioWaste: Boolean,
     nonBioWaste: Boolean,
     donation: Boolean,
-
+    cl:Boolean,
+    el:Boolean,
+    fo:Boolean,
+    st: Boolean,
+    to:Boolean,
     status: {
         type: Boolean,
         default: false

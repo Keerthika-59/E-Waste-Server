@@ -64,32 +64,6 @@ router.post('/add',  async(req, res) => {
 
 router.post("/login", async(req, res) => {
     try {
-<<<<<<< HEAD
-      const { email, password } = req.body;
-  
-      // validate
-  
-      const existingUser = await Rep.findOne({ email });
-      if (!existingUser)
-        return res.status(401).json({ errorMessage: "Wrong email or password." });
-  
-      const passwordCorrect = await bcrypt.compare(
-        password,
-        existingUser.password
-      );
-      if (!passwordCorrect)
-        return res.status(401).json({ errorMessage: "Wrong email or password." });
-  
-      // sign the token
-  
-      const token = jwt.sign(
-        {
-          user: existingUser._id,
-        },
-        process.env.JWT_SECRET
-      );
-      return res.json(token)
-=======
         const { email, password } = req.body;
 
         // validate
@@ -124,7 +98,6 @@ router.post("/login", async(req, res) => {
             process.env.JWT_SECRET
         );
         return res.json(token)
->>>>>>> 472832d5330700d0ed7f3adf769941af2659dfb2
     } catch (err) {
         console.error(err.message);
         res.status(500).send();

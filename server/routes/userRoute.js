@@ -195,30 +195,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.put("/userAct/:userId", async (req, res) => {
-  try {
-    const details = {
-      bioWaste: req.body.bio,
-      nonBioWaste: req.body.nonbio,
-      donation: req.body.donation,
-      type1: req.body.type1,
-      type2: req.body.type2,
-      type3: req.body.type3,
-      type4: req.body.type4,
-      type5: req.body.type5,
-      repId: "idk",
-    };
-    await User.findByIdAndUpdate(req.params.userId, {
-      $push: {
-        activity: details,
-      },
-    });
-    res.json({ message: "set" });
-    
-  } catch (e) {
-    console.log(e);
-    res.json({ message: "error while setting activity" });
-  }
-});
+
 
 module.exports = router;

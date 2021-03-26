@@ -188,7 +188,7 @@ exports.viewCompletedActivities = async (req, res) => {
 }
 
 exports.completeActivity = async (req, res) => {
-
+    
     try {
         const id = req.params.id;
 
@@ -325,7 +325,7 @@ exports.unverifiedRepresentatives = async (req, res) => {
         res.send(data);
 
     } catch (error) {
-        
+
         res.send({
             'message': 'Failed to Get Unverified Representatives'
         })

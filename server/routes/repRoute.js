@@ -34,6 +34,9 @@ router.post('/add',  async(req, res) => {
     const city = req.body.city;
     const address = req.body.address;
     const password = req.body.password;
+
+    console.log(req.body);
+
     
     const existingUser = await Representative.findOne({ email });
     if (existingUser)
@@ -54,8 +57,7 @@ router.post('/add',  async(req, res) => {
         password: passwordHash
     }
 
-
-    const newRep = new Rep(newRepData);
+    const newRep = new Representative(newRepData);
 
     await newRep.save()
     .then(() => res.json('Representative Added'))
@@ -97,7 +99,8 @@ router.post("/login", async(req, res) => {
             },
             process.env.JWT_SECRET
         );
-        return res.json(token)
+        return res.json(token);
+        
     } catch (err) {
         console.error(err.message);
         res.status(500).send();

@@ -15,15 +15,24 @@ router.get('/user/completed/:id', viewCompletedActivities);
 router.get('/representative/:id', viewRepresentativesById);
 router.get('/contacts', viewContacts);
 
+// checking activity by ID
 router.get('/activity/:id', viewActivities);
-router.get('/activity/complete/:id', completeActivity);
 
+// complete a activity(for representaive dashboard)
+router.put('/activity/complete/:id', completeActivity);
+
+//get all unverified representatives
 router.get('/representatives/unverified', unverifiedRepresentatives);
 
-router.put('/representative/:id', verifyRepresentative );
-
-router.post('/login', postCredentials);
+// logout
 router.get('/logout', LogOut);
+
+// Login
+router.post('/login', postCredentials);
+
+// verify a repersentative
+router.put('/representative/:id', verifyRepresentative);
+
 
 router.delete('/user/:id', deleteUser);
 router.delete('/rep/:id', deleteRepresentative);

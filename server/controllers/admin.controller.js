@@ -136,7 +136,6 @@ exports.viewPendingActivities = async (req, res) => {
 
         let len = response.activity.length;
         console.log(len);
-
         let userActivities = [];
 
         for(let i=0; i < len; i++) {
@@ -189,7 +188,7 @@ exports.viewCompletedActivities = async (req, res) => {
 }
 
 exports.completeActivity = async (req, res) => {
-
+    
     try {
         const id = req.params.id;
 
@@ -274,6 +273,26 @@ exports.deleteRepresentative = async (req, res) => {
     }
 }
 
+// delete contacts by Contact Id
+exports.deleteContacts = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+        await Contact.findByIdAndDelete(id);
+
+        res.send({
+            'message': 'Contact Deleted Successfully'
+        });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Delete Contact'
+        })
+    }
+}
+
+
 // verify a representative
 exports.verifyRepresentative = async (req, res) => {
 
@@ -294,6 +313,25 @@ exports.verifyRepresentative = async (req, res) => {
         })
     }
 }
+
+// get all unverified representatives
+
+exports.unverifiedRepresentatives = async (req, res) => {
+
+    try {
+        const id = req.params.id;
+        const data = await Representative.find({isVerified : false});
+
+        res.send(data);
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to Get Unverified Representatives'
+        })
+    }
+}
+
 
 // get all contacts
 exports.viewContacts = async (req, res) => {

@@ -140,7 +140,7 @@ exports.getRepresentativeCompletedActivities = async (req, res) => {
             if (datas)
                 userActivities.push(datas);
         }
-
+        
         res.send({ response, user_activities: userActivities });
 
     } catch (error) {

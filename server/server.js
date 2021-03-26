@@ -15,6 +15,8 @@ app.use(function(req,res,next){
 
 const port = process.env.PORT || 5000;
 
+// http://localhost:5000/reps/add
+
 app.use(cors());
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());

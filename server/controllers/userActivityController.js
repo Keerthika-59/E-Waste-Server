@@ -16,11 +16,12 @@ exports.createActivity = async (req, res) => {
 
         const Reps = await Representative.findOne({ status : true, city : Userdata.city});
 
-        await Representative.findByIdAndUpdate(id, {
-            status : false
-        })
-
         if (Reps) {
+
+            await Representative.findByIdAndUpdate(Reps._id, {
+                status: false
+            })
+            
             const activityData = new Activity(req.body);
             assigned = true;
 

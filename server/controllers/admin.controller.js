@@ -157,7 +157,6 @@ exports.viewPendingActivities = async (req, res) => {
     }
 }
 
-
 exports.viewCompletedActivities = async (req, res) => {
 
     try {
@@ -174,11 +173,11 @@ exports.viewCompletedActivities = async (req, res) => {
             let act_id = response.activity[i];
             let datas = await getCompletedActivity(act_id);
             // console.log(datas);
-            
+
             if(datas)
                 userActivities.push(datas);
         }
-
+        
         res.send({ response, user_activities: userActivities });
 
     } catch (error) {

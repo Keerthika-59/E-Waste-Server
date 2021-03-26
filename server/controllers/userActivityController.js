@@ -6,8 +6,8 @@ const Representative = require('../models/repModel');
 exports.createActivity = async (req, res) => {
 
     try {
-        const id = req.params.id;
 
+        const id = req.params.id;
         // assigning representative if there is some representative
         let assigned = false;
         const Userdata = await User.findById(id);
@@ -21,7 +21,7 @@ exports.createActivity = async (req, res) => {
             await Representative.findByIdAndUpdate(Reps._id, {
                 status: false
             })
-            
+
             const activityData = new Activity(req.body);
             assigned = true;
 
@@ -35,7 +35,6 @@ exports.createActivity = async (req, res) => {
             activityData.userDetails.userAddress = Userdata.address;
 
             await activityData.save();
-
             Reps.activity.push(activityData);
 
             Userdata.activity.push(activityData);
@@ -75,11 +74,89 @@ exports.getAll = (req, res) => {
         });
 };
 
+
+const getPendingActivity = async (id) => {
+
+    const data = await Activity.findById(id);
+    if (!data.status) {
+        return data;
+
+    }
+}
+
+const getCompletedActivity = async (id) => {
+
+    const data = await Activity.findById(id);
+    if (data.status) {
+        return data;
+
+    }
+}
+
+exports.getRepresentativePendingActivities = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const response = await Representative.findById(id);
+
+        let len = response.activity.length;
+        // console.log(len);
+
+        let userActivities = [];
+
+        for (let i = 0; i < len; i++) {
+            let act_id = response.activity[i];
+            let datas = await getPendingActivity(act_id);
+
+            if (datas)
+                userActivities.push(datas);
+        }
+
+        res.send({ response, user_activities: userActivities });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to View'
+        })
+    }
+}
+
+exports.getRepresentativeCompletedActivities = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const response = await Representative.findById(id);
+
+        let len = response.activity.length;
+        // console.log(len);
+
+        let userActivities = [];
+
+        for (let i = 0; i < len; i++) {
+            let act_id = response.activity[i];
+            let datas = await getCompletedActivity(act_id);
+
+            if (datas)
+                userActivities.push(datas);
+        }
+
+        res.send({ response, user_activities: userActivities });
+
+    } catch (error) {
+
+        res.send({
+            'message': 'Failed to View'
+        })
+    }
+}
+
+// get all pending activities
 exports.getPendingActivities = async (req, res) => {
 
     try {
 
-        const pendingActivities = await Activity.find({status : false});
+        const pendingActivities = await Activity.find({ status: false });
 
         res.send(pendingActivities);
 
@@ -91,6 +168,7 @@ exports.getPendingActivities = async (req, res) => {
     }
 }
 
+// get all completed activities
 exports.getCompletedActivities = async (req, res) => {
     
     try {

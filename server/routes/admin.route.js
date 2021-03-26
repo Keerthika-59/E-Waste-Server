@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const { checker, deleteUser,
-    LogOut, deleteRepresentative, viewActivities, postCredentials, verifyRepresentative, viewUsers, viewRepresentatives, viewContacts, viewPendingActivities, viewCompletedActivities, viewRepresentativesById} = require('../controllers/admin.controller')
+    LogOut, deleteRepresentative, completeActivity, viewActivities, postCredentials, verifyRepresentative, viewUsers, viewRepresentatives, viewContacts, viewPendingActivities, viewCompletedActivities, viewRepresentativesById} = require('../controllers/admin.controller')
 
 router.get('/', checker);
 
@@ -14,7 +14,9 @@ router.get('/user/completed/:id', viewCompletedActivities);
 
 router.get('/representative/:id', viewRepresentativesById);
 router.get('/contacts', viewContacts);
+
 router.get('/activity/:id', viewActivities);
+router.get('/activity/complete/:id', completeActivity);
 
 router.put('/representative/:id', verifyRepresentative );
 

@@ -98,7 +98,14 @@ router.post("/login", async(req, res) => {
             return res
                 .status(400)
                 .json({ errorMessage: "Please enter all required fields." });
-        const existingUser = await Rep.findOne({ email });
+        const existingUser = await Representative.findOne({ email });
+
+        // console.log(existingUser);
+
+        if(!existingUser.isVerified) {
+            return res.status(401).json({ errorMessage: "Representative is Not Verified" });
+        }
+
         if (!existingUser)
             return res.status(401).json({ errorMessage: "Wrong email or password." });
 

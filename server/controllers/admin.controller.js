@@ -196,7 +196,7 @@ exports.completeActivity = async (req, res) => {
 
         await Activity.findByIdAndUpdate(id, {
             status : true
-        }); 
+        });
 
         const data = await Activity.findById(id);
 
